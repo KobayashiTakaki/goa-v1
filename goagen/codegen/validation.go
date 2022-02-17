@@ -385,7 +385,9 @@ func validationsCode(att *design.AttributeDefinition, data map[string]interface{
 			data["required"] = r
 			val += RunTemplate(requiredValT, data)
 		}
-		res = append(res, val)
+		if val != "" {
+			res = append(res, val)
+		}
 	}
 	return
 }
