@@ -252,7 +252,7 @@ func (v *Validator) recurseAttribute(att, catt *design.AttributeDefinition, n, t
 			}
 			return nil
 		})
-		if hasValidations {
+		if hasValidations && catt.Validation != nil && !catt.Validation.HasRequiredOnly() {
 			validation = RunTemplate(v.userValT, map[string]interface{}{
 				"depth":  depth,
 				"target": fmt.Sprintf("%s.%s", target, GoifyAtt(catt, n, true)),
@@ -379,7 +379,7 @@ func validationsCode(att *design.AttributeDefinition, data map[string]interface{
 	if required := validation.Required; len(required) > 0 {
 		var val string
 		for i, r := range required {
-			if i > 0 {
+			if i > 0 && val != "" {
 				val += "\n"
 			}
 			data["required"] = r
